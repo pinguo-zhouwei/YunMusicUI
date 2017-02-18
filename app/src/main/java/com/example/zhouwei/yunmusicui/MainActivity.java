@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
                 View headerView = null;
 
                 LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -74,13 +73,14 @@ public class MainActivity extends AppCompatActivity {
                 if(firstVisibleItem == 0){
                     headerView = recyclerView.getChildAt(firstVisibleItem);
                 }
+                float alpha = 0;
                 if(headerView == null){
-                    return;
+                    alpha = 1;// 如果headerView 为null ,说明已经到达header滑动的最大高度了
+                }else{
+                    alpha = Math.abs(headerView.getTop()) * 1.0f / headerView.getHeight();
+                    Log.i(TAG,"alpha:"+alpha + "top :"+headerView.getTop() + " height: "+headerView.getHeight());
                 }
 
-                float alpha = Math.abs(headerView.getTop()) * 1.0f / headerView.getHeight();
-
-                Log.i(TAG,"alpha:"+alpha + "top :"+headerView.getTop() + " height: "+headerView.getHeight());
                 Drawable drawable = mHeaderBg.getDrawable();
                 if(drawable!=null){
                     drawable.mutate().setAlpha((int) (alpha * 255));
